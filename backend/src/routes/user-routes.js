@@ -1,10 +1,9 @@
 const {Router} = require('express');
-const upload = require('../middlewares/multer-middleware')
+const {upload} = require('../middlewares/multer-middleware')
 const router = Router();
 
-router.route('/register' , upload.feilds([
-    {name :'profileImg' , maxCount:1} ,
-    {}
+router.route('/register' , upload.fields([
+    {name :'profileImg' , maxCount:1} 
 ]))
 
 
