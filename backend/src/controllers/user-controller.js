@@ -43,4 +43,64 @@ const userRegister = async (req, res) => {
     }
 }
 
-module.exports = {userRegister}
+const logIn = async (req, res) =>{
+    const {email , password} = req.body;
+    if(!email || !password){
+        res.status(400).json({
+            success:false,
+            message:"all feilds are required",
+            data:{}
+        })
+    }
+    try{
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(400).json({
+                success:false,
+                message:"user not found",
+                data:{}
+            })
+        }
+        const isMatchPassword = await user.isPasswordMatched(password);
+        if(!isMatchPassword){
+            return res.status(400).json({
+                success:false,
+                message:"invalid credentials",
+                data:{}
+            })
+        }
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        res.status(200).cookie("refreshToken", refreshToken, {
+            httpOnly:true,
+            secure:true,
+           
+        }).json({
+            success:true,
+            message:"login successful",
+            data:{
+                accessToken,
+                user:{
+                    _id:user._id,
+                    name:user.name,
+                
+            }
+        }})
+        
+}catch(err){
+    res.status(500).json({
+        success:false,
+        message:"internal server error",
+        data:{error:err.message}
+    })
+}
+}
+
+const getProfile = async (req , res) => {
+    
+}
+
+module.exports = {userRegister, logIn}
