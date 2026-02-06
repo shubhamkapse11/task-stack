@@ -73,20 +73,21 @@ const logIn = async (req, res) =>{
         const refreshToken = user.generateRefreshToken();
         user.refreshToken = refreshToken;
         await user.save();
-
-        res.status(200).cookie("refreshToken", refreshToken, {
-            httpOnly:true,
-            secure:true,
-           
-        }).json({
+       const options={
+        httpOnly: true,
+  secure: true,
+       }
+        res.status(200).cookie("refreshToken", refreshToken,options).cookie("accessToken", accessToken,options ).json({
             success:true,
             message:"login successful",
             data:{
                 accessToken,
+                   success:false,
+            message:"all feilds are required",
                 user:{
                     _id:user._id,
                     name:user.name,
-                
+                    role:user.role,
             }
         }})
         
