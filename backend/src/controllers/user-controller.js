@@ -73,11 +73,17 @@ const logIn = async (req, res) =>{
         const refreshToken = user.generateRefreshToken();
         user.refreshToken = refreshToken;
         await user.save();
-       const options={
-        httpOnly: true,
-  secure: true,
-       }
-        res.status(200).cookie("refreshToken", refreshToken,options).cookie("accessToken", accessToken,options ).json({
+             const options = {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+             }
+
+                res.status(200)
+                    .cookie("refreshToken", refreshToken, options)
+                    .cookie("accessToken", accessToken, options)
+                    .json({
             success:true,
             message:"login successful",
             data:{
