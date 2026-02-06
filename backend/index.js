@@ -6,7 +6,9 @@ const DBconnect = require('./src/config/db');
 dotenv.config()
 
 DBconnect();
-const app = express()
+
+const app = express();
+
 app.use(cors({
     origin:'*'
 }));
