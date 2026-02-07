@@ -110,6 +110,34 @@ const getProfile = async (req , res) => {
     const {user} = req; 
     console.log("user in get profile controller" , user);
     
+    try{
+        if(!user){
+            return res.status(404).json({
+                success:false,
+                message:"user not found",
+                data:{}
+            })
+        }
+        const Isuser = await User.findById(user._id).select("-password -refreshToken");
+        if(!Isuser){
+            return res.status(404).json({
+                success:false,
+                message:"user not found",
+                data:{}
+            })
+        }
+        res.status(200).json({
+            success:true,
+            message:"profile fetched successfully",
+            data: Isuser
+        })
+    }catch(err){
+        res.status(500).json({
+            success:false,
+            message:"internal server error",
+            data:{error:err.message}
+        })
+    }
 }
 
 module.exports = {userRegister, logIn , getProfile}
