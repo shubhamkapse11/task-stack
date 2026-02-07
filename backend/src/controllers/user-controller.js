@@ -107,7 +107,9 @@ const logIn = async (req, res) =>{
 }
 
 const getProfile = async (req , res) => {
+    const {user} = req; 
+    console.log("user in get profile controller" , user);
     
 }
 
-module.exports = {userRegister, logIn}
+module.exports = {userRegister, logIn , getProfile}

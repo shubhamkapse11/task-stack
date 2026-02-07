@@ -16,6 +16,7 @@ const authVerify  = async (req, res , next) =>{
      console.log("token in auth middleware" , decodedToken);
 
     const user = await User.findById(decodedToken._id).select("-password -refreshToken");
+    
     if(!user){
         return res.status(401).json({
             success:false,
