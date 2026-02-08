@@ -1,12 +1,13 @@
 const {Router} = require('express');
 const {upload} = require('../middlewares/multer-middleware')
 const router = Router();
-const {userRegister , logIn ,getProfile} = require('./../controllers/user-controller')
+const {userRegister , logIn ,getProfile , updateProfile} = require('./../controllers/user-controller')
 const authVerify = require('../middlewares/auth-middleware');
 
 router.route('/register').post(upload.single('avatar'),userRegister)
 router.route('/login').post(logIn)
 router.route('/profile').get(authVerify ,getProfile)
+router.route('/update/:id').patch(updateProfile)
 
 
 module.exports = router;

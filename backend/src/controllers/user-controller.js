@@ -109,7 +109,7 @@ const logIn = async (req, res) =>{
 const getProfile = async (req , res) => {
     const {user} = req; 
     console.log("user in get profile controller" , user);
-    
+
     try{
         if(!user){
             return res.status(404).json({
@@ -140,4 +140,13 @@ const getProfile = async (req , res) => {
     }
 }
 
-module.exports = {userRegister, logIn , getProfile}
+const updateProfile = async (req , res)=>{
+    const {id} = req.params ;
+    const {name} = req.body ;
+    const user = await  User.findByIdAndUpdate(id ,{ $set : {
+        name:name
+    }},{new:true})
+    console.log("user found=" , user)
+}
+
+module.exports = { userRegister, logIn , getProfile , updateProfile }
